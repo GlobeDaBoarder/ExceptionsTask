@@ -17,6 +17,10 @@ public class Euro implements Comparable<Euro>{
         this(euro.value);
     }
 
+    public Euro(){
+        this(0);
+    }
+
     public Euro add(Euro euro){
         return new Euro(this.value + euro.value);
     }

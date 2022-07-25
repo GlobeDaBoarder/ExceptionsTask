@@ -6,14 +6,19 @@ import org.junit.jupiter.params.provider.CsvFileSource;
 
 import static org.junit.jupiter.api.Assertions.*;
 
+@TestInstance(TestInstance.Lifecycle.PER_CLASS)
 public class PurchaseFactoryTest {
     private AbstractPurchase purchase;
     private PurchaseFactory purchaseFactory;
 
     @BeforeEach
-    void init(){
-        purchaseFactory = new PurchaseFactory();
+    void initializePurchase(){
         purchase = null;
+    }
+
+    @BeforeAll
+    void initializeFactory(){
+        purchaseFactory = new PurchaseFactory();
     }
 
     @ParameterizedTest

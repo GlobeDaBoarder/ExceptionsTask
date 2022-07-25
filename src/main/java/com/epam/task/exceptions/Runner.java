@@ -18,7 +18,7 @@ public class Runner {
 
         System.out.println(purchaseList);
 
-        purchaseList.removeSubList(0, 2);
+        purchaseList.removeSubList(0, 1);
 
         System.out.println(purchaseList);
 

@@ -4,7 +4,7 @@ import java.io.*;
 import java.util.*;
 
 public class PurchaseList{
-    ArrayList<AbstractPurchase> purchaseList;
+    private final ArrayList<AbstractPurchase> purchaseList;
 
     public PurchaseList(String filePath){
         this(new File(filePath));

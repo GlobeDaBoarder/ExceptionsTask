@@ -2,7 +2,7 @@ package com.epam.task.exceptions;
 
 public class Runner {
     public static void main(String[] args) {
-        PurchaseList purchaseList = new PurchaseList(".\\src\\main\\resources\\input.txt");
+        PurchaseList purchaseList = new PurchaseList("src\\main\\resources\\com\\epam\\task\\exceptions\\input.txt");
         System.out.println(purchaseList);
 
         purchaseList.insertPurchase(

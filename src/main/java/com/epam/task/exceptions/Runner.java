@@ -1,7 +1,5 @@
 package com.epam.task.exceptions;
 
-import java.io.File;
-
 public class Runner {
     public static void main(String[] args) {
         PurchaseList purchaseList = new PurchaseList(".\\src\\main\\resources\\input.txt");

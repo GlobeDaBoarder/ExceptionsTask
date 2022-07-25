@@ -10,44 +10,24 @@ public class PurchaseList{
         this(new File(filePath));
     }
 
-    public PurchaseList(File inFile) {
+    public PurchaseList(){
         this.purchaseList = new ArrayList<>();
+    }
+
+    public PurchaseList(File inFile) {
+        this();
 
         try {
-            BufferedReader bufferedReader =new BufferedReader(new FileReader(inFile));
+            BufferedReader bufferedReader = new BufferedReader(new FileReader(inFile));
             String line;
             while ((line = bufferedReader.readLine()) != null){
                 String[] values = line.split(";");
-                if(values.length == 3){
-                    try{
-                        Purchase purchase = new Purchase(
-                                new Product(
-                                        values[0],
-                                        new Euro(Integer.parseInt(values[1]))
-                                ),
-                                Integer.parseInt(values[2])
-                        );
-                        this.purchaseList.add(purchase);
-                        continue;
-                    }catch (Exception ignored){
-                    }
-                }
 
-                if (values.length == 4){
-                    try{
-                        PriceDiscountPurchase purchase = new PriceDiscountPurchase(
-                                new Product(
-                                        values[0],
-                                        new Euro(Integer.parseInt(values[1]))
-                                ),
-                                Integer.parseInt(values[2]),
-                                new Euro(Integer.parseInt(values[3]))
-                        );
-                        this.purchaseList.add(purchase);
-                        continue;
-                    }catch (Exception ignored){
-                    }
-                }
+                PurchaseFactory purchaseFactory = new PurchaseFactory();
+                AbstractPurchase purchase = purchaseFactory.createPurchase(values);
+
+                if(purchase != null)
+                    this.purchaseList.add(purchase);
 
                 System.err.println(line);
             }

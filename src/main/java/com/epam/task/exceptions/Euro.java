@@ -1,16 +1,20 @@
 package com.epam.task.exceptions;
 
+import com.epam.task.exceptions.customExc.NegativeArgumentException;
+import com.epam.task.exceptions.customExc.NonPositiveArgumentException;
+import com.epam.task.exceptions.customExc.OutOfBoundArgumentException;
+
 public class Euro implements Comparable<Euro>{
     private final int value;
 
-    public Euro(int valueInCents) {
-        if(valueInCents <= 0)
-            throw new IllegalArgumentException("can't be negative");
+    public Euro(int valueInCents) throws NonPositiveArgumentException {
+        if(valueInCents < 0)
+            throw new NegativeArgumentException("value can't be non positive");
         this.value = valueInCents;
     }
 
     public Euro(int euros, int cents){
-        this(euros*100 + cents);
+        this(validateParameters(euros, cents));
     }
 
     public Euro(Euro euro){
@@ -19,6 +23,22 @@ public class Euro implements Comparable<Euro>{
 
     public Euro(){
         this(0);
+    }
+
+    public Euro(String strCents){
+        this(Integer.parseInt(strCents));
+    }
+
+    private static int validateParameters(int euros, int cents) throws NonPositiveArgumentException{
+        if(euros < 0)
+            throw new NegativeArgumentException("euros can't be less than 0");
+        if (cents < 0)
+            throw  new NegativeArgumentException("cents can't be less than 0");
+        if (cents > 99)
+            throw new OutOfBoundArgumentException("cent's can't be more than 100");
+
+        return euros*100 + cents;
+
     }
 
     public Euro add(Euro euro){

@@ -2,6 +2,8 @@ package com.epam.task.exceptions;
 
 import org.junit.jupiter.api.*;
 
+import java.util.Comparator;
+
 import static org.junit.jupiter.api.Assertions.*;
 
 public class PurchaseListTest {
@@ -9,7 +11,8 @@ public class PurchaseListTest {
 
     @BeforeEach
     void init(){
-        this.purchaseList = new PurchaseList("src\\main\\resources\\com\\epam\\task\\exceptions\\input.txt");
+        this.purchaseList = new PurchaseList("src\\main\\resources\\com\\epam\\task\\exceptions\\input.txt",
+                Comparator.comparingInt(AbstractPurchase::getPurchasedNum));
     }
 
     @Test
@@ -67,17 +70,17 @@ public class PurchaseListTest {
 
     @Test
     void sortTest(){
-        this.purchaseList.sortByCost();
+        this.purchaseList.sort();
 
         String expected = """
-                PriceDiscountPurchase;meat;11.00;2;0.80;21.00
-                Purchase;bread;1.45;5;7.00
-                Purchase;bread;1.54;3;4.00
-                PriceDiscountPurchase;potato;1.80;2;0.10;3.00
+                PriceDiscountPurchase;bread;1.55;1;0.02;1.00
                 Purchase;butter;3.70;1;3.00
                 PriceDiscountPurchase;butter;3.41;1;0.01;3.00
                 Purchase;milk;1.31;2;2.00
-                PriceDiscountPurchase;bread;1.55;1;0.02;1.00
+                PriceDiscountPurchase;potato;1.80;2;0.10;3.00
+                PriceDiscountPurchase;meat;11.00;2;0.80;21.00
+                Purchase;bread;1.54;3;4.00
+                Purchase;bread;1.45;5;7.00
                 """;
 
         assertEquals(expected, this.purchaseList.toString());
@@ -89,7 +92,7 @@ public class PurchaseListTest {
 
         @BeforeEach
         void sortInit(){
-            purchaseList.sortByCost();
+            purchaseList.sort();
             this.ind = 0;
         }
 

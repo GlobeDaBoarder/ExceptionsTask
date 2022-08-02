@@ -1,10 +1,14 @@
 package com.epam.task.exceptions;
 
+import com.epam.task.exceptions.customExc.NonPositiveArgumentException;
+
 public abstract class AbstractPurchase implements Comparable<AbstractPurchase>{
     protected final Product product;
     protected final int purchasedNum;
 
-    public AbstractPurchase(Product product, int purchasedNum) {
+    public AbstractPurchase(Product product, int purchasedNum) throws NonPositiveArgumentException{
+        if (purchasedNum <= 0)
+            throw new NonPositiveArgumentException("purchase amount can't be <= 0");
         this.product = product;
         this.purchasedNum = purchasedNum;
     }
@@ -45,6 +49,11 @@ public abstract class AbstractPurchase implements Comparable<AbstractPurchase>{
                 + additionalToString() + this.getCost().toString();
     }
 
+    public final int getPurchasedNum() {
+        return this.purchasedNum;
+    }
 
-
+    public final Product getProduct() {
+        return this.product;
+    }
 }

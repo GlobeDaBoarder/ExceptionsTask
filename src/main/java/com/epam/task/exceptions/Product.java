@@ -1,12 +1,17 @@
 package com.epam.task.exceptions;
 
+import com.epam.task.exceptions.customExc.EmptyArgumentException;
+import com.epam.task.exceptions.customExc.NonPositiveArgumentException;
+
 public class Product {
     private final String name;
     private final Euro price;
 
-    public Product(String name, Euro price) {
+    public Product(String name, Euro price) throws EmptyArgumentException{
         if (name.isBlank())
-            throw new IllegalArgumentException("name can't be empty");
+            throw new EmptyArgumentException("name can't be empty");
+        if(price.equals(new Euro(0)))
+            throw new NonPositiveArgumentException("Price can;t be 0");
         this.name = name;
         this.price = price;
     }
@@ -31,7 +36,8 @@ public class Product {
         return this.price.equals(other.price) && this.name.equals(other.name);
     }
 
-    public Euro getPrice() {
-        return price;
+    public final Euro getPrice() {
+        return this.price;
     }
+    public final String getName() { return this.name;}
 }

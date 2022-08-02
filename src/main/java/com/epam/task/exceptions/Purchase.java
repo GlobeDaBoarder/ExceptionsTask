@@ -5,6 +5,7 @@ public class Purchase extends AbstractPurchase{
         super(product, purchasedNum);
     }
 
+
     @Override
     protected Euro getFinalCost(Euro baseCost) {
         return baseCost;

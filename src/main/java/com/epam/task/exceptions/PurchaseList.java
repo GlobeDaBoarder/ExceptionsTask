@@ -1,35 +1,43 @@
 package com.epam.task.exceptions;
 
+import com.epam.task.exceptions.customExc.CsvLineException;
+
 import java.io.*;
 import java.util.*;
 
 public class PurchaseList{
     private final ArrayList<AbstractPurchase> purchaseList;
+    private final Comparator<AbstractPurchase> comparator;
+    private boolean sorted = false;
 
-    public PurchaseList(String filePath){
-        this(new File(filePath));
+    public PurchaseList(String filePath, Comparator<AbstractPurchase> comparator){
+        this(new File(filePath), comparator);
     }
 
-    public PurchaseList(){
-        this.purchaseList = new ArrayList<>();
+    public PurchaseList(Comparator<AbstractPurchase> comparator){
+        this.purchaseList = new ArrayList<>(0);
+        this.comparator = comparator;
     }
 
-    public PurchaseList(File inFile) {
-        this();
+    public PurchaseList(File inFile, Comparator<AbstractPurchase> comparator) {
+        this(comparator);
 
         try {
             BufferedReader bufferedReader = new BufferedReader(new FileReader(inFile));
             String line;
             while ((line = bufferedReader.readLine()) != null){
-                String[] values = line.split(";");
-
                 PurchaseFactory purchaseFactory = new PurchaseFactory();
-                AbstractPurchase purchase = purchaseFactory.createPurchase(values);
+                AbstractPurchase purchase = null;
+                try {
+                    purchase = purchaseFactory.createPurchase(line);
+                } catch (CsvLineException e) {
+                    System.err.println(e + " caused by: " + e.getCause().getClass().getSimpleName() + ": "
+                            + e.getCause().getMessage());
+                }
 
                 if(purchase != null)
                     this.purchaseList.add(purchase);
 
-                System.err.println(line);
             }
         } catch (IOException e) {
             e.printStackTrace();
@@ -57,7 +65,7 @@ public class PurchaseList{
     public Euro getTotalCost(){
         Euro totalCost = new Euro();
         for (AbstractPurchase purchase: this.purchaseList){
-            totalCost.add(purchase.getCost());
+            totalCost = totalCost.add(purchase.getCost());
         }
         return totalCost;
     }
@@ -73,11 +81,24 @@ public class PurchaseList{
         return stringBuilder.toString();
     }
 
-    public void sortByCost(){
-        Collections.sort(this.purchaseList);
+    public void sort(){
+        this.purchaseList.sort(comparator);
+        sorted = true;
+    }
+
+    //generic search??
+    //Don't quite understand yet how to search by a parameter that has been chosen in the Comparable
+    public int searchByQuantity(int quantityValue){
+        return Collections.binarySearch(this.purchaseList, new Purchase(new Product("test", new Euro(100)), quantityValue),
+                this.comparator);
     }
 
     public int searchByProductCost(Euro searchCost){
+        if(!sorted){
+            this.purchaseList.sort(this.comparator);
+            this.sorted = true;
+        }
+        Collections.sort(this.purchaseList);
         return Collections.binarySearch(this.purchaseList, new Purchase(new Product("dummy", searchCost), 1));
     }
 }

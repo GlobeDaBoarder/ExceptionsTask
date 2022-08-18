@@ -12,7 +12,7 @@ public class PurchaseListTest {
     @BeforeEach
     void init(){
         this.purchaseList = new PurchaseList("src\\main\\resources\\com\\epam\\task\\exceptions\\input.txt",
-                Comparator.comparingInt(AbstractPurchase::getPurchasedNum));
+                Comparator.comparing(AbstractPurchase::getCost));
     }
 
     @Test
@@ -74,13 +74,13 @@ public class PurchaseListTest {
 
         String expected = """
                 PriceDiscountPurchase;bread;1.55;1;0.02;1.53
-                Purchase;butter;3.70;1;3.70
-                PriceDiscountPurchase;butter;3.41;1;0.01;3.40
                 Purchase;milk;1.31;2;2.62
+                PriceDiscountPurchase;butter;3.41;1;0.01;3.40
                 PriceDiscountPurchase;potato;1.80;2;0.10;3.50
-                PriceDiscountPurchase;meat;11.00;2;0.80;21.20
+                Purchase;butter;3.70;1;3.70
                 Purchase;bread;1.54;3;4.62
                 Purchase;bread;1.45;5;7.25
+                PriceDiscountPurchase;meat;11.00;2;0.80;21.20
                 """;
 
         assertEquals(expected, this.purchaseList.toString());
@@ -98,30 +98,30 @@ public class PurchaseListTest {
 
         @Test
         void searchForCost21(){
-            ind = purchaseList.searchByProductCost(new Euro(21, 20));
+            ind = purchaseList.search(new Purchase(new Product("test", new Euro(2120)), 1));
 
-            assertEquals(0, ind);
+            assertEquals(7, ind);
         }
 
         @Test
         void searchForCost7(){
-            ind = purchaseList.searchByProductCost(new Euro(7, 25));
+            ind = purchaseList.search(new Purchase(new Product("test", new Euro(725)), 1));
 
-            assertEquals(1, ind);
+            assertEquals(6, ind);
         }
 
         @Test
         void searchForCost4(){
-            ind = purchaseList.searchByProductCost(new Euro(4, 62));
+            ind = purchaseList.search(new Purchase(new Product("test", new Euro(462)), 1));
 
-            assertEquals(2, ind);
+            assertEquals(5, ind);
         }
 
         @Test
         void searchForCost3000(){
-            ind = purchaseList.searchByProductCost(new Euro(3000, 0));
+            ind = purchaseList.search(new Purchase(new Product("test", new Euro(300000)), 1));
 
-            assertEquals(-1, ind);
+            assertTrue(ind < 0);
         }
     }
 }

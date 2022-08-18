@@ -33,7 +33,7 @@ public class Runner {
 
         System.out.println(purchaseList);
 
-        System.out.println("Index of item with quantity 5 is:" + purchaseList.searchByQuantity(5));
+        System.out.println("Index of item with quantity 5 is:" + purchaseList.search(new Purchase(new Product("test", new Euro(100)), 5)));
 
         System.out.println("Total cost: " + purchaseList.getTotalCost());
 

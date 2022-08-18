@@ -87,19 +87,7 @@ public class PurchaseList{
         }
     }
 
-    //generic search??
-    //Don't quite understand yet how to search by a parameter that has been chosen in the Comparable
-    public int searchByQuantity(int quantityValue){
-        return Collections.binarySearch(this.purchaseList, new Purchase(new Product("test", new Euro(100)), quantityValue),
-                this.comparator);
-    }
-
-    public int searchByProductCost(Euro searchCost){
-        if(!sorted){
-            this.purchaseList.sort(this.comparator);
-            this.sorted = true;
-        }
-        Collections.sort(this.purchaseList);
-        return Collections.binarySearch(this.purchaseList, new Purchase(new Product("dummy", searchCost), 1));
+    public int search(AbstractPurchase abstractPurchase){
+        return Collections.binarySearch(this.purchaseList, abstractPurchase, this.comparator);
     }
 }

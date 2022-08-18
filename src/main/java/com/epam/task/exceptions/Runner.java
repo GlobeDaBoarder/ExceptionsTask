@@ -8,7 +8,9 @@ public class Runner {
         Comparator<AbstractPurchase> comparatorByQuantity = Comparator.comparingInt(AbstractPurchase::getPurchasedNum);
         PurchaseList purchaseList = new PurchaseList("src\\main\\resources\\com\\epam\\task\\exceptions\\input.txt",
                 comparatorByQuantity);
+
         System.out.println(purchaseList);
+
 
         purchaseList.insertPurchase(
                 new Purchase(

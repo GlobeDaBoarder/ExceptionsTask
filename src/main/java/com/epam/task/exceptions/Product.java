@@ -7,7 +7,7 @@ public class Product {
     private final String name;
     private final Euro price;
 
-    public Product(String name, Euro price) throws EmptyArgumentException{
+    public Product(String name, Euro price){
         if (name.isBlank())
             throw new EmptyArgumentException("name can't be empty");
         if(price.equals(new Euro(0)))

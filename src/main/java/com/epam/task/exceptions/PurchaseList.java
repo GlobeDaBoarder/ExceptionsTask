@@ -6,7 +6,7 @@ import java.io.*;
 import java.util.*;
 
 public class PurchaseList{
-    private final ArrayList<AbstractPurchase> purchaseList;
+    public final List<AbstractPurchase> purchaseList;
     private final Comparator<AbstractPurchase> comparator;
     private boolean sorted = false;
 
@@ -22,24 +22,19 @@ public class PurchaseList{
     public PurchaseList(File inFile, Comparator<AbstractPurchase> comparator) {
         this(comparator);
 
-        try {
-            BufferedReader bufferedReader = new BufferedReader(new FileReader(inFile));
-            String line;
+        try (BufferedReader bufferedReader = new BufferedReader(new FileReader(inFile))){
+            String line = "";
             while ((line = bufferedReader.readLine()) != null){
-                PurchaseFactory purchaseFactory = new PurchaseFactory();
-                AbstractPurchase purchase = null;
                 try {
-                    purchase = purchaseFactory.createPurchase(line);
+                    AbstractPurchase purchase = PurchaseFactory.createPurchase(line);
+                    purchaseList.add(purchase);
                 } catch (CsvLineException e) {
                     System.err.println(e + " caused by: " + e.getCause().getClass().getSimpleName() + ": "
                             + e.getCause().getMessage());
                 }
-
-                if(purchase != null)
-                    this.purchaseList.add(purchase);
-
             }
         } catch (IOException e) {
+            sorted = true;
             e.printStackTrace();
         }
     }
@@ -47,19 +42,23 @@ public class PurchaseList{
     public void insertPurchase(AbstractPurchase purchase, int ind){
         try{
             this.purchaseList.add(ind, purchase);
-        }catch (Exception e){
+        }catch (IndexOutOfBoundsException e){
             this.purchaseList.add(purchase);
         }
     }
 
-    public void removeSubList(int indFrom, int indTo){
+    public int removeSubList(int indFrom, int indTo){
         if (indTo >= this.purchaseList.size())
             indTo = this.purchaseList.size() - 1;
 
         if (indFrom < 0 )
             indFrom = 0;
 
+        if (indFrom >= indTo)
+            return 0;
+
         this.purchaseList.subList(indFrom, indTo).clear();
+        return indTo-indFrom;
     }
 
     public Euro getTotalCost(){
@@ -82,8 +81,10 @@ public class PurchaseList{
     }
 
     public void sort(){
-        this.purchaseList.sort(comparator);
-        sorted = true;
+        if (!sorted){
+            this.purchaseList.sort(comparator);
+            sorted = true;
+        }
     }
 
     //generic search??

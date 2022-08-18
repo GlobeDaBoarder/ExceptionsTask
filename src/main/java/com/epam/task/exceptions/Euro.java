@@ -7,9 +7,9 @@ import com.epam.task.exceptions.customExc.OutOfBoundArgumentException;
 public class Euro implements Comparable<Euro>{
     private final int value;
 
-    public Euro(int valueInCents) throws NonPositiveArgumentException {
+    public Euro(int valueInCents){
         if(valueInCents < 0)
-            throw new NegativeArgumentException("value can't be non positive");
+            throw new NegativeArgumentException("value of cents can't be non positive");
         this.value = valueInCents;
     }
 
@@ -22,14 +22,14 @@ public class Euro implements Comparable<Euro>{
     }
 
     public Euro(){
-        this(0);
+        this.value = 0;
     }
 
     public Euro(String strCents){
         this(Integer.parseInt(strCents));
     }
 
-    private static int validateParameters(int euros, int cents) throws NonPositiveArgumentException{
+    private static int validateParameters(int euros, int cents){
         if(euros < 0)
             throw new NegativeArgumentException("euros can't be less than 0");
         if (cents < 0)
@@ -52,15 +52,6 @@ public class Euro implements Comparable<Euro>{
     public Euro mul(int k){
         return new Euro(this.value * k);
     }
-
-    public Euro mul(double x, RoundMethods roundMethod, int d){
-        return new Euro(roundMethod.round(value * x, d));
-    }
-    public Euro round(RoundMethods roundMethod, int d){
-        return new Euro(roundMethod.round(value, d));
-    }
-
-
 
     @Override
     public String toString() {

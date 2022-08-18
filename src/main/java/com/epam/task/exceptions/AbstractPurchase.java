@@ -6,19 +6,22 @@ public abstract class AbstractPurchase implements Comparable<AbstractPurchase>{
     protected final Product product;
     protected final int purchasedNum;
 
-    public AbstractPurchase(Product product, int purchasedNum) throws NonPositiveArgumentException{
+    public AbstractPurchase(Product product, int purchasedNum){
         if (purchasedNum <= 0)
             throw new NonPositiveArgumentException("purchase amount can't be <= 0");
         this.product = product;
         this.purchasedNum = purchasedNum;
     }
 
+    public AbstractPurchase(String[] values){
+        this(new Product(values[0], new Euro(values[1])), Integer.parseInt(values[2]));
+    }
+
     protected abstract Euro getFinalCost(Euro baseCost);
 
     public Euro getCost(){
         Euro baseCost = product.getPrice().mul(purchasedNum);
-        Euro finalCost = getFinalCost(baseCost);
-		return finalCost.round(RoundMethods.FLOOR, 2);
+        return getFinalCost(baseCost);
     }
 
     @Override
@@ -45,8 +48,8 @@ public abstract class AbstractPurchase implements Comparable<AbstractPurchase>{
 
     @Override
     public String toString() {
-        return this.getClass().getSimpleName() + ";" + product.toString() + ";" +  purchasedNum + ";"
-                + additionalToString() + this.getCost().toString();
+        return getClass().getSimpleName() + ";" + product + ";" +  purchasedNum + ";"
+                + additionalToString() + getCost();
     }
 
     public final int getPurchasedNum() {

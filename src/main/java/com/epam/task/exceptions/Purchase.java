@@ -5,6 +5,10 @@ public class Purchase extends AbstractPurchase{
         super(product, purchasedNum);
     }
 
+    public Purchase(String[] values){
+        super(values);
+    }
+
 
     @Override
     protected Euro getFinalCost(Euro baseCost) {

@@ -15,13 +15,17 @@ public class PriceDiscountPurchase extends AbstractPurchase{
         this.discountAmount = discountAmount;
     }
 
+    public PriceDiscountPurchase(String[] values) {
+        this(new Product(values[0], new Euro(values[1])) ,Integer.parseInt(values[2]), new Euro(values[3]));
+    }
+
     @Override
     protected Euro getFinalCost(Euro baseCost) {
-        return baseCost.sub(discountAmount);
+        return new Euro(baseCost.sub(discountAmount));
     }
 
     @Override
     protected String additionalToString() {
-        return discountAmount.toString() + ";";
+        return discountAmount + ";";
     }
 }

@@ -10,59 +10,36 @@ import static org.junit.jupiter.api.Assertions.*;
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
 public class PurchaseFactoryTest {
     private AbstractPurchase purchase;
-    private PurchaseFactory purchaseFactory;
 
     @BeforeEach
     void initializePurchase(){
         purchase = null;
     }
 
-    @BeforeAll
-    void initializeFactory(){
-        purchaseFactory = new PurchaseFactory();
-    }
 
     @ParameterizedTest
     @CsvFileSource(resources = "createPurchaseFromFactoryCsv.csv", delimiter = ';')
-    void createPurchaseFromFactoryTest(String name, String price, String quantity){
-        try {
-            this.purchase = this.purchaseFactory.createPurchase(new String[]{name, price, quantity});
-        } catch (CsvLineException e) {
-            e.printStackTrace();
-        }
+    void createPurchaseFromFactoryTest(String name, String price, String quantity) throws CsvLineException {
+        this.purchase = PurchaseFactory.createPurchase(new String[]{name, price, quantity});
         assertEquals(Purchase.class, this.purchase.getClass());
     }
 
     @ParameterizedTest
     @CsvFileSource(resources = "createPriceDiscountPurchaseFromFactoryCsv.csv", delimiter = ';')
-    void createPriceDiscountPurchasePurchaseFromFactoryTest(String name, String price, String quantity, String discount){
-        try {
-            this.purchase = this.purchaseFactory.createPurchase(new String[]{name, price, quantity, discount});
-        } catch (CsvLineException e) {
-            e.printStackTrace();
-        }
+    void createPriceDiscountPurchasePurchaseFromFactoryTest(String name, String price, String quantity, String discount) throws CsvLineException {
+        this.purchase = PurchaseFactory.createPurchase(new String[]{name, price, quantity, discount});
         assertEquals(PriceDiscountPurchase.class, this.purchase.getClass());
     }
 
     @ParameterizedTest
     @CsvFileSource(resources = "brokenPurchaseData.csv", delimiter = ';')
-    void purchasesNotCreated(String name, String price, String quantity){
-        try {
-            this.purchase = this.purchaseFactory.createPurchase(new String[]{name, price, quantity});
-        } catch (CsvLineException e) {
-            e.printStackTrace();
-        }
-        assertNull(this.purchase);
+    void purchasesNotCreated(String name, String price, String quantity) {
+        assertThrows(CsvLineException.class, () -> this.purchase = PurchaseFactory.createPurchase(new String[]{name, price, quantity}));
     }
 
     @ParameterizedTest
     @CsvFileSource(resources = "brokenPriceDiscountPurchaseData.csv", delimiter = ';')
-    void priceDiscountPurchasesNotCreated(String name, String price, String quantity, String discount){
-        try {
-            this.purchase = this.purchaseFactory.createPurchase(new String[]{name, price, quantity, discount});
-        } catch (CsvLineException e) {
-            e.printStackTrace();
-        }
-        assertNull(this.purchase);
+    void priceDiscountPurchasesNotCreated(String name, String price, String quantity, String discount) {
+        assertThrows(CsvLineException.class, () -> this.purchase = PurchaseFactory.createPurchase(new String[]{name, price, quantity}));
     }
 }

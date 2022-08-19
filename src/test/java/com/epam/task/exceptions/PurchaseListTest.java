@@ -12,7 +12,7 @@ public class PurchaseListTest {
     @BeforeEach
     void init(){
         this.purchaseList = new PurchaseList("src\\main\\resources\\com\\epam\\task\\exceptions\\input.txt",
-                Comparator.comparing(AbstractPurchase::getCost));
+                Comparator.comparing(Purchase::getCost));
     }
 
     @Test

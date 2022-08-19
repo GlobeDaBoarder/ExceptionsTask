@@ -9,7 +9,7 @@ import static org.junit.jupiter.api.Assertions.*;
 
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
 public class PurchaseFactoryTest {
-    private AbstractPurchase purchase;
+    private Purchase purchase;
 
     @BeforeEach
     void initializePurchase(){

@@ -5,7 +5,7 @@ import java.util.WeakHashMap;
 
 public class Runner {
     public static void main(String[] args) {
-        Comparator<AbstractPurchase> comparatorByQuantity = Comparator.comparingInt(AbstractPurchase::getPurchasedNum);
+        Comparator<Purchase> comparatorByQuantity = Comparator.comparingInt(Purchase::getPurchasedNum);
         PurchaseList purchaseList = new PurchaseList("src\\main\\resources\\com\\epam\\task\\exceptions\\input.txt",
                 comparatorByQuantity);
 

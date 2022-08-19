@@ -6,18 +6,18 @@ public class PurchaseFactory {
     private enum PurchaseKind {
         PURCHASE {
             @Override
-            protected AbstractPurchase getPurchase(String[] values) {
+            protected Purchase getPurchase(String[] values) {
                 return new Purchase(values);
             }
         },
         PRICE_DISCOUNT_PURCHASE {
             @Override
-            protected AbstractPurchase getPurchase(String[] values) {
+            protected Purchase getPurchase(String[] values) {
                 return new PriceDiscountPurchase(values);
             }
         };
 
-        protected abstract AbstractPurchase getPurchase(String[] values);
+        protected abstract Purchase getPurchase(String[] values);
     }
 
     private static PurchaseKind getPurchaseKind(String[] values) {
@@ -28,11 +28,11 @@ public class PurchaseFactory {
         throw new OutOfBoundArgumentException("Illegal amount of values");
     }
 
-    public static AbstractPurchase createPurchase(String line) throws CsvLineException {
+    public static Purchase createPurchase(String line) throws CsvLineException {
         return createPurchase(line.split(";"));
     }
 
-    public static AbstractPurchase createPurchase(String[] values) throws CsvLineException {
+    public static Purchase createPurchase(String[] values) throws CsvLineException {
         try{
             return getPurchaseKind(values).getPurchase(values);
         } catch (OutOfBoundArgumentException | NumberFormatException | NonPositiveArgumentException |

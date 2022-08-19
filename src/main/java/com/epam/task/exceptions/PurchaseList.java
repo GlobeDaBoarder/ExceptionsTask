@@ -6,27 +6,27 @@ import java.io.*;
 import java.util.*;
 
 public class PurchaseList{
-    public final List<AbstractPurchase> purchaseList;
-    private final Comparator<AbstractPurchase> comparator;
+    public final List<Purchase> purchaseList;
+    private final Comparator<Purchase> comparator;
     private boolean sorted = false;
 
-    public PurchaseList(String filePath, Comparator<AbstractPurchase> comparator){
+    public PurchaseList(String filePath, Comparator<Purchase> comparator){
         this(new File(filePath), comparator);
     }
 
-    public PurchaseList(Comparator<AbstractPurchase> comparator){
+    public PurchaseList(Comparator<Purchase> comparator){
         this.purchaseList = new ArrayList<>(0);
         this.comparator = comparator;
     }
 
-    public PurchaseList(File inFile, Comparator<AbstractPurchase> comparator) {
+    public PurchaseList(File inFile, Comparator<Purchase> comparator) {
         this(comparator);
 
         try (BufferedReader bufferedReader = new BufferedReader(new FileReader(inFile))){
             String line = "";
             while ((line = bufferedReader.readLine()) != null){
                 try {
-                    AbstractPurchase purchase = PurchaseFactory.createPurchase(line);
+                    Purchase purchase = PurchaseFactory.createPurchase(line);
                     purchaseList.add(purchase);
                 } catch (CsvLineException e) {
                     System.err.println(e + " caused by: " + e.getCause().getClass().getSimpleName() + ": "
@@ -39,7 +39,7 @@ public class PurchaseList{
         }
     }
 
-    public void insertPurchase(AbstractPurchase purchase, int ind){
+    public void insertPurchase(Purchase purchase, int ind){
         try{
             this.purchaseList.add(ind, purchase);
         }catch (IndexOutOfBoundsException e){
@@ -63,7 +63,7 @@ public class PurchaseList{
 
     public Euro getTotalCost(){
         Euro totalCost = new Euro();
-        for (AbstractPurchase purchase: this.purchaseList){
+        for (Purchase purchase: this.purchaseList){
             totalCost = totalCost.add(purchase.getCost());
         }
         return totalCost;
@@ -72,7 +72,7 @@ public class PurchaseList{
     @Override
     public String toString() {
         StringBuilder stringBuilder = new StringBuilder();
-        for (AbstractPurchase purchase: this.purchaseList){
+        for (Purchase purchase: this.purchaseList){
             stringBuilder.append(purchase.toString());
             stringBuilder.append("\n");
         }
@@ -87,7 +87,7 @@ public class PurchaseList{
         }
     }
 
-    public int search(AbstractPurchase abstractPurchase){
+    public int search(Purchase abstractPurchase){
         return Collections.binarySearch(this.purchaseList, abstractPurchase, this.comparator);
     }
 }

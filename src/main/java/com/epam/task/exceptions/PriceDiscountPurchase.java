@@ -3,7 +3,7 @@ package com.epam.task.exceptions;
 import com.epam.task.exceptions.customExc.NonPositiveArgumentException;
 import com.epam.task.exceptions.customExc.OutOfBoundArgumentException;
 
-public class PriceDiscountPurchase extends AbstractPurchase{
+public class PriceDiscountPurchase extends Purchase{
     private final Euro discountAmount;
 
     public PriceDiscountPurchase(Product product, int purchasedNum, Euro discountAmount) {
@@ -20,8 +20,8 @@ public class PriceDiscountPurchase extends AbstractPurchase{
     }
 
     @Override
-    protected Euro getFinalCost(Euro baseCost) {
-        return new Euro(baseCost.sub(discountAmount));
+    public Euro getCost() {
+        return super.getCost().sub(this.discountAmount);
     }
 
     @Override

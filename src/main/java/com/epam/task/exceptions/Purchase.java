@@ -1,10 +1,14 @@
 package com.epam.task.exceptions;
 
+import com.epam.task.exceptions.customExc.CsvLineException;
 import com.epam.task.exceptions.customExc.NonPositiveArgumentException;
+import com.epam.task.exceptions.customExc.OutOfBoundArgumentException;
 
-public class Purchase implements  Comparable<Purchase>{
-    protected final Product product;
-    protected final int purchasedNum;
+import java.util.Comparator;
+
+public class Purchase{
+    private final Product product;
+    private final int purchasedNum;
 
     public Purchase(Product product, int purchasedNum){
         if (purchasedNum <= 0)
@@ -13,17 +17,26 @@ public class Purchase implements  Comparable<Purchase>{
         this.purchasedNum = purchasedNum;
     }
 
+    public Purchase(Purchase purchase){
+        this(purchase.product, purchase.purchasedNum);
+    }
+
     public Purchase(String[] values){
-        this(new Product(values[0], new Euro(values[1])), Integer.parseInt(values[2]));
+        this(validateValues(values));
+    }
+
+    private static Purchase validateValues(String[] values) {
+        if (!PurchaseFactory.isPurchase(values))
+            throw new OutOfBoundArgumentException("Wrong number of values");
+
+        return new Purchase(
+                new Product(values[0], new Euro(values[1])),
+                Integer.parseInt(values[2])
+        );
     }
 
     public Euro getCost(){
         return product.getPrice().mul(purchasedNum);
-    }
-
-    @Override
-    public int compareTo(Purchase o) {
-        return o.getCost().compareTo(this.getCost());
     }
 
     @Override

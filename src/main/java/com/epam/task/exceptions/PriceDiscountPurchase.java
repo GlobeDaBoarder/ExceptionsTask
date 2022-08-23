@@ -15,13 +15,28 @@ public class PriceDiscountPurchase extends Purchase{
         this.discountAmount = discountAmount;
     }
 
+    public PriceDiscountPurchase(PriceDiscountPurchase priceDiscountPurchase){
+        this(priceDiscountPurchase.getProduct(), priceDiscountPurchase.getPurchasedNum(), priceDiscountPurchase.discountAmount);
+    }
+
     public PriceDiscountPurchase(String[] values) {
-        this(new Product(values[0], new Euro(values[1])) ,Integer.parseInt(values[2]), new Euro(values[3]));
+        this(validateValues(values));
+    }
+
+    private static PriceDiscountPurchase validateValues(String[] values) {
+        if (!PurchaseFactory.isDiscountPurchase(values))
+            throw new OutOfBoundArgumentException("Wrong number of values");
+
+        return new PriceDiscountPurchase(
+                new Product(values[0], new Euro(values[1])),
+                Integer.parseInt(values[2]),
+                new Euro(values[3])
+        );
     }
 
     @Override
     public Euro getCost() {
-        return super.getCost().sub(this.discountAmount);
+        return super.getCost().sub(this.discountAmount.mul(getPurchasedNum()));
     }
 
     @Override

@@ -20,7 +20,7 @@ public class Runner {
                         ),
                         2
                 ),
-                0
+                -1
         );
 
         System.out.println(purchaseList);

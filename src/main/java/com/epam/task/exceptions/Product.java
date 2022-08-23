@@ -3,7 +3,9 @@ package com.epam.task.exceptions;
 import com.epam.task.exceptions.customExc.EmptyArgumentException;
 import com.epam.task.exceptions.customExc.NonPositiveArgumentException;
 
-public class Product {
+import java.util.Comparator;
+
+public class Product{
     private final String name;
     private final Euro price;
 

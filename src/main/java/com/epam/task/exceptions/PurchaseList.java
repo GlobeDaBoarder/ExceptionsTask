@@ -6,21 +6,22 @@ import java.io.*;
 import java.util.*;
 
 public class PurchaseList{
-    public final List<Purchase> purchaseList;
+    private final List<Purchase> purchaseList;
     private final Comparator<Purchase> comparator;
-    private boolean sorted = false;
+    private boolean sorted;
 
     public PurchaseList(String filePath, Comparator<Purchase> comparator){
         this(new File(filePath), comparator);
     }
 
     public PurchaseList(Comparator<Purchase> comparator){
-        this.purchaseList = new ArrayList<>(0);
-        this.comparator = comparator;
+        this("", comparator);
     }
 
     public PurchaseList(File inFile, Comparator<Purchase> comparator) {
-        this(comparator);
+        this.purchaseList = new ArrayList<>(0);
+        this.comparator = comparator;
+        this.sorted = false;
 
         try (BufferedReader bufferedReader = new BufferedReader(new FileReader(inFile))){
             String line = "";
@@ -40,22 +41,25 @@ public class PurchaseList{
     }
 
     public void insertPurchase(Purchase purchase, int ind){
-        try{
-            this.purchaseList.add(ind, purchase);
-        }catch (IndexOutOfBoundsException e){
-            this.purchaseList.add(purchase);
+        if(ind >= this.purchaseList.size())
+            ind = this.purchaseList.size() - 1;
+
+        if(ind < 0){
+            ind = 0;
         }
+
+        this.purchaseList.add(ind, purchase);
     }
 
     public int removeSubList(int indFrom, int indTo){
+        if (indFrom >= indTo)
+            return 0;
+
         if (indTo >= this.purchaseList.size())
             indTo = this.purchaseList.size() - 1;
 
         if (indFrom < 0 )
             indFrom = 0;
-
-        if (indFrom >= indTo)
-            return 0;
 
         this.purchaseList.subList(indFrom, indTo).clear();
         return indTo-indFrom;
@@ -88,6 +92,7 @@ public class PurchaseList{
     }
 
     public int search(Purchase abstractPurchase){
+        sort();
         return Collections.binarySearch(this.purchaseList, abstractPurchase, this.comparator);
     }
 }
